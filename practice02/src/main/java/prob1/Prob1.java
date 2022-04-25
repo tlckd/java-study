@@ -11,7 +11,7 @@ public class Prob1 {
 		 * 50원 동전, 10원 동전, 1원 동전 각 몇 개로 변환 되는지 작성하시오.
 		 */
 		Scanner scanner = new Scanner(System.in); 
-		System.out.print("금액 : ");
+		System.out.print("금액 : 깃 공부중..");
 		int count =scanner.nextInt();
 		
 	}
