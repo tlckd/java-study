@@ -6,6 +6,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>chapter03</module>
-		<module>practice</module>
+		<module>practice01</module>
 	</modules>
 </project>
