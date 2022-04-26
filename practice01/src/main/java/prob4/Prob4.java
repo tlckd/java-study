@@ -12,6 +12,18 @@ public class Prob4 {
 		for(int i=1; i<=text.length();i++) {
 			System.out.println(text.substring(0, i));
 		}
+
+//		int length = text.length();  
+//		for(int i = 0; i < length; i++) {
+//			for(int j = 0; j <= i; j++) {
+//				System.out.print(text.charAt(j)); -> charAt으로 한글자식 출력 
+//			}
+//
+//
+//			System.out.println("");
+//		}
+		
+		
 		scanner.close();
 	}
 
