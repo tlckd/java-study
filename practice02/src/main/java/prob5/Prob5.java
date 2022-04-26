@@ -34,13 +34,15 @@ public class Prob5 {
 					// 새 게임 여부 확인하기
 					System.out.print("다시 하겠습니까(y/n)>>");
 					String answer = scanner.next();
-					if ("y".equals(answer) == false) {
+					if ("y".equals(answer)) {
+						correctNumber = random.nextInt( 100 ) + 1;
+						System.out.println(correctNumber);
+						System.out.println("수를결정하였습니다. 맞추어보세요");
+						System.out.println("1-100");
+					}else {
 						break;
 					}
-					correctNumber = random.nextInt( 100 ) + 1;
-					System.out.println(correctNumber);
-					System.out.println("수를결정하였습니다. 맞추어보세요");
-					System.out.println("1-100");
+
 					
 					
 				}
