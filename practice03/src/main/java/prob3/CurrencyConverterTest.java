@@ -4,8 +4,12 @@ public class CurrencyConverterTest {
 
 	public static void main(String[] args) {
 		//  환율을 세팅 합니다.
-		CurrencyConverter.setRate(1197.0);
+		//CurrencyConverter.setRate(1197.0);
+		CurrencyConverter.setRate(1266.05);
 		
+		double krw0 = CurrencyConverter.toKRW( 1. );
+		System.out.println( "1달러는 " + krw0 + "원 입니다" );
+
 		double dollar = CurrencyConverter.toDollar( 1000000. );
 		System.out.println( "백만원은 " + dollar + "달러 입니다" );
 		
