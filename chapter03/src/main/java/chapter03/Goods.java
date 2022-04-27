@@ -1,11 +1,18 @@
 package chapter03;
 
 public class Goods {
+	public static int countOfGoods;
 	private String name;
 	private int price;
 	private int countStock;
 	private int countSold;
 	
+	public Goods() {
+		//Goods.countOfGoods++;
+		//Goods.countOfGoods+=1;
+		Goods.countOfGoods=Goods.countOfGoods+1;
+		
+	}
 	public String getName() {
 		return name;
 	}
@@ -33,6 +40,16 @@ public class Goods {
 	}
 	public void setCountSold(int countSold) {
 		this.countSold = countSold;
+	}
+	
+	public void showInfo() {
+		// TODO Auto-generated method stub
+		System.out.println(" name : " + name + " price: " + price + " countstock: " + countStock + " countsold: " + countSold );
+	}
+	public int calcDiscountPrice(double discountRate) {
+		// TODO Auto-generated method stub
+		
+		return (int)(discountRate * price);
 	}
 	
 
