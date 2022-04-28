@@ -14,8 +14,11 @@ public class GoodsApp {
 		goods.showInfo();
 		
 		
-		Goods goods2 = new Goods();
+		Goods goods2 = new Goods("tv",10000,10,10);
+		goods2.showInfo();
+		
 		Goods goods3 = new Goods();
+		
 		
 		
 		System.out.println("Goods Count :" + Goods.countOfGoods);

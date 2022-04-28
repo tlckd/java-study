@@ -9,6 +9,27 @@ public class Song {
 	private int track;
 	
 	
+	public Song() {
+		
+	}
+	
+	public Song(String title, String artist, String album, String composer, int year, int track) {
+		this.title=title;
+		this.artist=artist;
+		this.album=album;
+		this.composer=composer;
+		this.year=year;
+		this.track=track;
+	}
+
+	public Song(String title, String artist) {
+		// TODO Auto-generated constructor stub
+		//this.title = title;
+		//this.artist= artist;
+		
+		this(title,artist,null,null,0,0);
+	}
+
 	public String getTitle() {
 		return title;
 	}

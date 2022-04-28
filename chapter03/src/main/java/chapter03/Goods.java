@@ -7,12 +7,29 @@ public class Goods {
 	private int countStock;
 	private int countSold;
 	
-	public Goods() {
+	
+	public Goods(String name) {
+		//Goods.countOfGoods=Goods.countOfGoods+1;
+		//this.name=name;
+		this(name,0,0,0);
+	}
+	
+	
+	public Goods(String name, int price, int countStock, int countSold) {
 		//Goods.countOfGoods++;
 		//Goods.countOfGoods+=1;
 		Goods.countOfGoods=Goods.countOfGoods+1;
+		this.name=name;
+		this.price=price;
+		this.countStock=countStock;
+		this.countSold=countSold;
 		
 	}
+	public Goods() {
+		//Goods.countOfGoods=Goods.countOfGoods+1;
+		this(null,0,0,0);
+	}
+	
 	public String getName() {
 		return name;
 	}
