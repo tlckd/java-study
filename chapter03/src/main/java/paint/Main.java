@@ -17,9 +17,33 @@ public class Main {
 		
 		//point2.show();
 		
+		Point point3 = new ColorPoint(40, 50, "red");
+		drawPoint(point3);
+		//point3.show(true);
+		
+		Triangle triangle = new Triangle();
+		drawTraiangle(triangle);
+		
+		Rectangle rectangle = new Rectangle();
+		drawRectangle(rectangle);
+		
+		
+		
 	}
 
 	public static void drawPoint(Point point) {
 		point.show();
+	}
+	
+//	public static void drawColorPoint(ColorPoint point) {
+//		point.show();
+//	}
+//	
+	
+	public static void drawTraiangle(Triangle triangle) {
+		triangle.draw();
+	}
+	public static void drawRectangle(Rectangle rectangle) {
+		rectangle.draw();
 	}
 }
