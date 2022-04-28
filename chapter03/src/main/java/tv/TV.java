@@ -6,6 +6,11 @@ public class TV {
 	private int volume;  //0~100 rotation
 	private boolean power;  
 	
+	
+	public TV() {
+		
+	}
+	
 	public void status() {
 		// TODO Auto-generated method stub
 		System.out.println("TV[channe="+7+", volume="+ volume + ", power= " + (power ? "on" : "off" ) + "]" );
