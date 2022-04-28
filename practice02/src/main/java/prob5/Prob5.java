@@ -53,7 +53,7 @@ public class Prob5 {
 					
 		}
 		
-		//scanner.close();
+		scanner.close();
 	}
 
 }
