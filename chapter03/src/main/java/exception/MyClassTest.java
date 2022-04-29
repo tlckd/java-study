@@ -17,7 +17,7 @@ public class MyClassTest {
 			e.printStackTrace();
 		}catch (MyException e) {
 			// TODO Auto-generated catch block
-			System.out.println("error");
+			System.out.println("error" + e );
 			e.printStackTrace();
 		}
 
