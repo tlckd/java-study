@@ -24,7 +24,7 @@ public class MainApp {
 			System.out.println(stack.pop()); // -1상태에서 pop 들어오면 exception을 내라.. 
 			System.out.println(stack.pop());
 			
-		} catch ( MyStackException ex) { // exception 처리 
+		} catch (MyStackException ex) { // exception 처리 
 			System.out.println( ex );
 		}
 
