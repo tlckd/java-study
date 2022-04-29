@@ -10,7 +10,7 @@ public class MainApp {
 			stack.push("!!!");
 			stack.push("java");
 			stack.push(".");
-
+			
 			while (stack.isEmpty() == false) { //top 0일떄 -1 내려가는거 처리 
 				String s = stack.pop();
 				System.out.println( s );
@@ -25,7 +25,7 @@ public class MainApp {
 			System.out.println(stack.pop());
 			
 		} catch (MyStackException ex) { // exception 처리 
-			System.out.println( ex );
+			System.out.println(ex);
 		}
 
 	}
