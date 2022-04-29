@@ -2,7 +2,7 @@ package prob6;
 
 import java.util.Scanner;
 
-public class CalcApp {
+public class CalcApp { //리팩토링 해보기 스위치 부분 부모로 레퍼런스 해보기 
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
