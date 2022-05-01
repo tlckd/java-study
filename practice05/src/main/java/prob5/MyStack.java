@@ -28,9 +28,9 @@ public class MyStack {
 			for(int i=0;i<temp.length;i++) {
 				buffer[i]=temp[i];
 			}
-			
+
 			pushitem(item);
-			
+
 		}
 		
 	}
