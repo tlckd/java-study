@@ -28,11 +28,37 @@ public class CalcApp {
 			Arithmetic arithmetic = null;
 			
 			/* 코드 작성 */
+			//int result = arithmetic.calculate(lValue, rValue);
+			//System.out.println( ">> " + result );
 			
-			int result = arithmetic.calculate(lValue, rValue);
-			System.out.println( ">> " + result );
+			switch(tokens[2]) {
+				case "+":
+					arithmetic = new Add();
+					cal(arithmetic,lValue,rValue);
+					break;
+				case "-":
+					arithmetic = new Sub();
+					cal(arithmetic,lValue,rValue);
+					break;
+				case "*":
+					arithmetic = new Mul();
+					cal(arithmetic,lValue,rValue);
+					break;
+				case "/":
+					arithmetic = new Div();
+					cal(arithmetic,lValue,rValue);
+					break;
+			}
+			
+			
 		}
 		
 		scanner.close();
 	}
+	
+	static public void cal(Arithmetic ari , int lValue, int rValue ) {
+		int result = ari.calculate(lValue, rValue);
+		System.out.println( ">> " + result );
+	}
+	
 }
