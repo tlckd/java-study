@@ -19,7 +19,6 @@ public class TCPClient {
 			
 			//1. 소켓생성 
 			socket = new Socket();
-			
 			//2. 서버 연결 
 			socket.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT));
 			
