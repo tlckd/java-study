@@ -18,6 +18,12 @@ public class TCPServer {
 			//1. 서버소켓 생성 
 			serverSocket = new ServerSocket();
 			
+			//1.1 TIME_WAIT 상태에서도 소켓 포트 번호를 할당이 가능하도록 하기 위해서..
+			serverSocket.setReuseAddress(true);
+			
+			
+			
+			
 			//2. 바인딩(binding) 
 			// Socekt에 InetSocketAddress(IP Address + 포트 )를 바인딩한다.
 			// IPAddress(0.0.0.0) : 특정 호스트 IP를 바인딩 하지 않는다.  
@@ -61,13 +67,21 @@ public class TCPServer {
 					
 					
 					//6. 데이터 쓰기 
+					
+					try {
+						Thread.sleep(2000); // 타임아웃테스트를 위한 거 
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					os.write(data.getBytes("utf-8")); 
 					// 클라이언트에게 전송 
 					
 					
 				}
 			}catch(SocketException ex) {
-				System.out.println("[server] 갑자기 닫힘 :" + ex );
+				System.out.println("[server] suddenly closed by client :" + ex );
 			}
 			 catch(IOException ex) {
 				System.out.println("[server] error:" + ex );
