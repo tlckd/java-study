@@ -1,0 +1,13 @@
+0.	작업계정: root, 작업 디렉토리: /root
+1.	Java JDK 다운로드 
+	: 다운로드 사이트에 가서 다운로드 
+	: jdk-11.0.13_linux-x64_bin.tar.gz 다운로드 한다.
+	
+2.	linux 서버에 업로드하기
+	: 수단과 방법을 가리지 말고 업로드 
+	
+3.	압축 풀기 
+	# tar xvfz jdk-11.0.13_linux-x64_bin.tar.gz 
+	
+4.	더존 설치 디렉토리 
+	# mkdir /user/local/douzone
