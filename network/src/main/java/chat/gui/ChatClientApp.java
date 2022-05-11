@@ -1,12 +1,26 @@
 package chat.gui;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Scanner;
 
-public class ChatClientApp {
 
+
+public class ChatClientApp {
+	
+	String SERVER_IP = null; 
+	private static final int SERVER_PORT=7777;
+	Socket socket;
 	public static void main(String[] args) {
 		String name = null;
 		Scanner scanner = new Scanner(System.in);
 
+
+		
 		while(true) {
 			
 			System.out.println("대화명을 입력하세요.");
@@ -23,6 +37,7 @@ public class ChatClientApp {
 		scanner.close();
 		
 		//1. creat socket 
+
 		
 		//2. connect server 
 		//3. get iostream(pipline established)
@@ -43,6 +58,31 @@ public class ChatClientApp {
 		}
 		
 		new ChatWindow(name).show();
+	}
+	
+	public void go(String name) {
+		try {
+		SERVER_IP = InetAddress.getLocalHost().getHostAddress();
+		//1. creat socket 
+		socket = new Socket();
+		
+		//2. connect server 
+		socket.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT));
+		
+		//3. get iostream(pipline established)
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+		PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+		
+		//4. join protocol 처리 
+		printWriter.println("join:" + name);
+		
+		if("join:ok".equals(bufferedReader.readLine())) {
+			
+		}
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

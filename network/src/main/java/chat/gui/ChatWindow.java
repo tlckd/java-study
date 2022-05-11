@@ -100,6 +100,8 @@ public class ChatWindow {
 		textField.setText("");
 		textField.requestFocus();
 		
+		
+		
 		updateTextArea("마이콜:"+message);
 	}
 	
