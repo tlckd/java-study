@@ -36,28 +36,10 @@ public class ChatClientApp {
 		
 		scanner.close();
 		
-		//1. creat socket 
-
-		
-		//2. connect server 
-		//3. get iostream(pipline established)
-		//4. join protocol 처리 
-		// pw.println("join:둘리");
-		// String line = br.readLine();
-		//   ---> join:둘리\n
-		//  join:ok가 오면 윈도우 뛰우기 윈도우에 소켓도 전달해야함 네임도 전달 ㅇㅇ 
-		// 네임으로 윈도우 타이틀 설정하기 ㅇㅇ 소켓+네임 전달 
-		// 들어가서 체크하지말고 ㅇㅇ 밖에서 체크 
 		// 옆에 접속유저 띄울려면 프린트라이트로 가지고있는게 아니라 쳇유저로 가지고 있어야함 ㅇㅇ 
+
+		new ChatClientApp().go(name);
 		
-		//왔다고 치면 
-		String line ="JOIN:OK";
-		
-		if("JOINT:OK".equals(line)){
-			new ChatWindow(name).show();
-		}
-		
-		new ChatWindow(name).show();
 	}
 	
 	public void go(String name) {
@@ -77,7 +59,8 @@ public class ChatClientApp {
 		printWriter.println("join:" + name);
 		
 		if("join:ok".equals(bufferedReader.readLine())) {
-			
+			new ChatWindow(name, socket, bufferedReader, printWriter).show();
+			System.out.println("연결됨");
 		}
 		
 		}catch(Exception ex) {
