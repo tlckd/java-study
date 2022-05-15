@@ -13,10 +13,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 public class ChatWindow {
 
@@ -30,21 +36,26 @@ public class ChatWindow {
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
-	private String name;
+	private ChatUser user;
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private PrintWriter printWriter;
-	
-	public ChatWindow(String name,Socket socket,BufferedReader bufferedReader, PrintWriter printWriter) {
-		frame = new Frame(name);
+	private ObjectInputStream objectInputStream;
+	DefaultListModel listModel = new DefaultListModel();
+
+	Object object;
+	ArrayList<String> userlist= new ArrayList<String>();
+	public ChatWindow(ChatUser user,Socket socket,BufferedReader bufferedReader, PrintWriter printWriter, ObjectInputStream objectInputStream) {
+		frame = new Frame(user.getName());
 		pannel = new Panel();
+		pannel2 = new Panel();
 		buttonSend = new Button("Send");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
-		this.name=name;
 		this.socket=socket;
 		this.bufferedReader = bufferedReader;
 		this.printWriter = printWriter;
+		this.objectInputStream = objectInputStream;
 	}
 
 
@@ -87,13 +98,13 @@ public class ChatWindow {
 		frame.add(BorderLayout.SOUTH, pannel);
 		
 		//Pannel2 
-//		list=new JList("나중에 넣을 내용");
-//		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		scrolled=new JScrollPane(list);
-//		scrolled.setBorder(BorderFactory.createEmptyBorder(0,10,10,10)); 
-//		
-//		pannel2.add(list);
-//		frame.add(BorderLayout.EAST, pannel2);
+		list=new JList(userlist.toArray());
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrolled=new JScrollPane(list);
+		scrolled.setBorder(BorderFactory.createEmptyBorder(0,10,10,10)); 
+		
+		pannel2.add(list);
+		frame.add(BorderLayout.EAST, pannel2);
 		
 		
 		// TextArea
@@ -110,7 +121,7 @@ public class ChatWindow {
 		});
 		frame.setVisible(true);
 		frame.pack();
-	
+		updateTextArea("안녕하세요 즐거운 채팅되세요!");
 		
 		/*3.
 		 * 쳇 클라 스레드 생성하고 실행 
@@ -148,16 +159,29 @@ public class ChatWindow {
 	
 	//스레드는 밖에 만들지말고 내부클래스를 사용 
 	private class ChatClientThread extends Thread{
-
+		
 		@Override
 		public void run() {
 			String message;
+
 			try {
-				
 				while((message = bufferedReader.readLine())!=null) {
-					System.out.println("읽음" + message);
+					String tokens[]=message.split(":");
+					
+					if("userlist".equals(tokens[0])) {
+						tokens[0]="";
+						listModel.clear();
+						for(int i=1;i<tokens.length;i++) {
+							listModel.addElement(tokens[i]);
+						}
+						list.setModel(listModel);
+						list.repaint();
+					}else {
 					updateTextArea(message);
+					}
 				}
+			
+						
 			}catch(Exception ex) {
 				ex.printStackTrace();
 			}

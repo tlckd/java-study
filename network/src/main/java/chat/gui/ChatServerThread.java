@@ -2,27 +2,35 @@ package chat.gui;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Base64.Decoder;
 import java.util.List;
 
 public class ChatServerThread extends Thread {
 	
-	private String nickname;
+	private ChatUser user;
 	private Socket socket;
 	BufferedReader bufferedReader;
 	PrintWriter printWriter;
 	List<Writer> listWriters;
+	List<ChatUser> userlist; 
+	List<OutputStream> listOutput;
+	ArrayList<String> usernamelist=new ArrayList<>();
 	int mycount=0;
+	ObjectOutputStream objectOutput=null;
+	ObjectInputStream objectInput=null;
 	
-	ChatServerThread(Socket socket, List<Writer> listWriters){
+	ChatServerThread(Socket socket, List<Writer> listWriters,List<ChatUser> userlist,List<OutputStream> listOutput){
 		this.socket=socket;
 		this.listWriters =listWriters;
+		this.userlist=userlist;
+		this.listOutput = listOutput;
 	}
 
 	@Override
@@ -30,14 +38,18 @@ public class ChatServerThread extends Thread {
 		try {
 		bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(),"UTF-8"));
 		printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8"),true);
+		objectOutput = new ObjectOutputStream(socket.getOutputStream());
+		objectInput = new ObjectInputStream(socket.getInputStream());
 		
 		while(true) {
 			String request = bufferedReader.readLine();
+	
 			if(request==null) {
 				ChatServer.log("클라이언트로 부터 연결 끊김");
 				doQuit(printWriter);
 				break;
 			}
+			
 
 			String[] tokens = request.split(":");
 			
@@ -57,37 +69,69 @@ public class ChatServerThread extends Thread {
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			doQuit(printWriter);
-			
+			System.out.println("문제발생 : " + ex.getMessage());
 		}
 	}
 	
 
 	
 
-	private void doJoin(String nickName, Writer writer) {
-		this.nickname = nickName;
+	private void doJoin(String name, Writer writer) {
+
 		PrintWriter write = (PrintWriter) writer; 
 		
-		String data = nickName + "님이 참여하셨습니다.";
+		String data = name + "님이 참여하셨습니다.";
 		broadcast(data);
+		
 		
 		//writer pool에 저장.
 		addWriter(writer);
 		
 		//ack 
 		printWriter.println("join:ok");
-		printWriter.flush();
+		try {
+		Object object = objectInput.readObject();
+		user = (ChatUser) object;
+		addUserlist(user);
+		makeUserList();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		
 	}
 	
+
 	private void broadcast(String data) {
 		
 		synchronized(listWriters){
 			for( Writer writer : listWriters) {
 				PrintWriter printWriter = (PrintWriter)writer;
 				printWriter.println(data);
-				printWriter.flush();
+
 			}
+		}
+	}
+	
+	private void broadcast2(String data) {
+		
+		synchronized(listWriters){
+			for( Writer writer : listWriters) {
+				PrintWriter printWriter = (PrintWriter)writer;
+				printWriter.println("userlist:"+data);
+
+			}
+		}
+	}
+	
+	private void addUserlist(ChatUser user) {
+		synchronized (userlist) {
+			userlist.add(user);
+		}
+	}
+	
+	private void RemoveuserList() {
+		synchronized (userlist) {
+			userlist.remove(mycount);
 		}
 	}
 	
@@ -99,6 +143,9 @@ public class ChatServerThread extends Thread {
 		
 	}
 	
+
+
+	
 	private void removeWriter(Writer writer) {
 		synchronized(listWriters){
 			listWriters.remove(mycount);
@@ -106,13 +153,15 @@ public class ChatServerThread extends Thread {
 		
 	}
 	
+
+
 	private void doMessage(String message) {
 		
 		synchronized(listWriters){
 			
 			for(int i=0 ; i<listWriters.size();i++) {
 				PrintWriter printWriter = (PrintWriter)listWriters.get(i);
-				printWriter.println(nickname+ ":"+ message);
+				printWriter.println(user.getName()+ ":"+ message);
 				//printWriter.flush();
 			}
 			
@@ -121,18 +170,45 @@ public class ChatServerThread extends Thread {
 	}
 	
 	private void doQuit(Writer writer) {
+		RemoveuserList();
 		removeWriter(writer);
+
+		//sendUserList();
 		
-		String data = nickname + "님이 퇴장 하셨습니다.";
+		String data = user.getName() + "님이 퇴장 하셨습니다.";
 		broadcast(data);
+		makeUserList();
 		
 	}
 	
+
 
 
 	public static void log(String log) {
 		System.out.println("[ChatServerThread] " + log);
 	}
 	
-	
+	public void makeUserList() {
+		synchronized(userlist) {
+			try {
+				
+				if(!usernamelist.isEmpty()) {
+					usernamelist.clear();
+				}
+				for(int i=0; i<userlist.size();i++) {
+					String name =userlist.get(i).getName();
+					usernamelist.add(name);
+				}
+				
+				for(int i=0; i<userlist.size();i++) {
+					userlist.get(i).setList(usernamelist);
+				}
+				
+				broadcast2(String.join(":", usernamelist));
+				
+				}catch(Exception ex) {
+					ex.printStackTrace();
+			}
+		}
+	}
 }

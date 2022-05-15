@@ -1,6 +1,8 @@
 package chat.gui;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -37,12 +39,13 @@ public class ChatClientApp {
 		scanner.close();
 		
 		// 옆에 접속유저 띄울려면 프린트라이트로 가지고있는게 아니라 쳇유저로 가지고 있어야함 ㅇㅇ 
-
-		new ChatClientApp().go(name);
+		ChatUser chatUser = new ChatUser(name);
+		
+		new ChatClientApp().go(chatUser);
 		
 	}
 	
-	public void go(String name) {
+	public void go(ChatUser user) {
 		try {
 		SERVER_IP = InetAddress.getLocalHost().getHostAddress();
 		//1. creat socket 
@@ -54,12 +57,19 @@ public class ChatClientApp {
 		//3. get iostream(pipline established)
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+		ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+		
 		
 		//4. join protocol 처리 
-		printWriter.println("join:" + name);
+		printWriter.println("join:" + user.getName());
+		
+
+
 		
 		if("join:ok".equals(bufferedReader.readLine())) {
-			new ChatWindow(name, socket, bufferedReader, printWriter).show();
+			objectOutputStream.writeObject(user);
+			new ChatWindow(user, socket, bufferedReader, printWriter, objectInput).show();
 			System.out.println("연결됨");
 		}
 		

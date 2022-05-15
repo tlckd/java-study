@@ -1,5 +1,8 @@
 package chat.gui;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -13,8 +16,8 @@ public class ChatServer {
 	ServerSocket serverSocket;
 	private static final int PORT=7777;
 	List<Writer> listWriters = new ArrayList<Writer>();
-	
-	
+	List<ChatUser> userlist = new ArrayList<ChatUser>();
+	List<OutputStream> listOutput = new ArrayList<OutputStream>();
 	public static void main(String[] args) {
 		new ChatServer().go();
 	}
@@ -25,12 +28,13 @@ public class ChatServer {
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
 			serverSocket.bind(new InetSocketAddress(hostAddress,PORT));
 			log( "연결 기다림" + hostAddress +":"+ PORT);
+
 			
 			while(true) {
 				Socket socket = serverSocket.accept();
 				
 				//스레드 시작 
-				new ChatServerThread(socket, listWriters).start();
+				new ChatServerThread(socket,listWriters,userlist,listOutput).start();
 			}
 			
 		} catch (Exception e) {
