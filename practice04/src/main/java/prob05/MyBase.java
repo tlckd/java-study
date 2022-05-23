@@ -23,10 +23,6 @@ public class MyBase extends Base {// mybase만 건들여서 문제풀기
 		System.out.println("낮에는 열심히 일하자!");
 	}
 	
-	public void night(){
-		System.out.println("night");
-	}
-	
 	public void noon() {
 		System.out.println("오후도 낮과 마찬가지로 일해야 합니다.");
 	}
